@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Loading from './Container/Loading';
+import Home from './Container/Home'
+import Counter from './Container/Counter';
 
-function App() {
+const LoadingWithHome = Loading(Home);
+
+function App(props) {
+
+const[loading , setLoading]=useState(false);
+const[data , setData]=useState([]);
+
+ const orgData=[
+   { id:101 , name:"Tanvi" },
+   {id:102 , name:"Vruti"}
+];
+
+useEffect(()=>{
+  setLoading(true);
+  setTimeout(()=>{setLoading(false);setData(orgData)} ,2000)
+},[])
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Reactjs
-        </a>
-      </header>
+    <div>
+          <LoadingWithHome
+           isloading ={loading}
+          data = {data}
+          />
+          
+          
     </div>
   );
 }
