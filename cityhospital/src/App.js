@@ -8,6 +8,7 @@ import Department from './Container/Department';
 import Doctors from './Container/Doctors/Doctors';
 import Home from './Container/Home';
 import Login from './Container/Login/Login';
+import Medicines from './Container/Medicines/Medicines';
 
 
 
@@ -18,6 +19,7 @@ function App(props) {
       <Switch>
       <Route  exact path={"/"} component={Home}/>
       <Route exact path={"/department"} component={Department}/>
+      <Route exact path={"/medicines"} component={Medicines}/>
       <Route exact path={"/doctors"} component={Doctors}/>
       <Route exact path={"/about"} component={About}/>
       <Route exact path={"/contact"} component={Contact}/>
