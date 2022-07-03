@@ -10,6 +10,7 @@ import Home from './Container/Home';
 import Login from './Container/Login/Login';
 import Medicines from './Container/Medicines/Medicines';
 import Appointment from './Container/Appointment/Appointment';
+import Userefexample from './Component/Userefexample/Userefexample';
 
 
 
@@ -17,7 +18,7 @@ import Appointment from './Container/Appointment/Appointment';
 function App(props) {
   return (
     <div>
-      <Header />
+      {/* <Header />
       <Switch>
       <Route  exact path={"/"} component={Home}/>
       <Route exact path={"/department"} component={Department}/>
@@ -28,7 +29,8 @@ function App(props) {
       <Route exact path={"/login"} component={Login}/>
       <Route exact path={"/appointment"} component={Appointment}/>
      </Switch>
-      <Footer/>
+      <Footer/> */}
+      <Userefexample/>
     </div>
   );
 }
