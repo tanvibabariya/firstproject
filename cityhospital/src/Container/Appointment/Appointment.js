@@ -1,15 +1,17 @@
 import React from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
+import { NavLink, useHistory } from 'react-router-dom';
 
 function Appointment(props) {
+    const history=useHistory()
 
     let schema = yup.object().shape({
-        name: yup.string().required(),
-        email: yup.string().email().required(),
-        phone: yup.string().required(),
-        date: yup.string().required(),
-        message: yup.string().required(),
+        name: yup.string().required("please enter name"),
+        email: yup.string().email().required("please enter email"),
+        phone: yup.string().required("please enter phone"),
+        date: yup.string().required("please select date"),
+        message: yup.string().required("please enter message"),
     });
 
 
@@ -23,7 +25,8 @@ function Appointment(props) {
         },
         validationSchema: schema,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
+            history.push("/listappointment");
         },
     });
     const { errors, handleSubmit, handleChange, handleBlur, touched } = formikObj;
@@ -36,6 +39,16 @@ function Appointment(props) {
                         <p>Aenean enim orci, suscipit vitae sodales ac, semper in ex. Nunc aliquam eget nibh eu euismod. Donec dapibus
                             blandit quam volutpat sollicitudin. Fusce tincidunt sit amet ex in volutpat. Donec lacinia finibus tortor.
                             Curabitur luctus eleifend odio. Phasellus placerat mi et suscipit pulvinar.</p>
+                    </div>
+
+                    <div className='row'>
+                        <div className='col-6 text-center mb-4'>
+                                 <NavLink  exact  to={"/appointment"}>BookAppointment</NavLink> 
+                               
+                        </div>
+                        <div className='col-6 text-center mb-4'>
+                        <NavLink exact  to={"/listappointment"}>ListAppointment</NavLink>
+                        </div>
                     </div>
 
                     <Formik values={formikObj}>
@@ -56,7 +69,7 @@ function Appointment(props) {
                                 </div>
 
                                 <div className="col-md-4 form-group mt-3 mt-md-0">
-                                    <input type="email"
+                                    <input type="text"
                                         className="form-control"
                                         name="email"
                                         id="email"
@@ -79,14 +92,14 @@ function Appointment(props) {
                                         data-msg="Please enter at least 4 chars"
                                         onChange={handleChange}
                                         onBlur={handleBlur} />
-                                    <p>{errors.phone && touched.phone ? errors.phone : ''}</p> 
+                                    <p>{errors.phone && touched.phone ? errors.phone : ''}</p>
                                     <div className="validate" />
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="col-md-4 form-group mt-3">
-                                    <input type="datetime"
+                                    <input type="date"
                                         name="date"
                                         className="form-control datepicker"
                                         id="date"
@@ -95,7 +108,7 @@ function Appointment(props) {
                                         data-msg="Please enter at least 4 chars"
                                         onChange={handleChange}
                                         onBlur={handleBlur} />
-                                    <p>{errors.date && touched.date ? errors.date : ''}</p> 
+                                    <p>{errors.date && touched.date ? errors.date : ''}</p>
                                     <div className="validate" />
                                 </div>
 
@@ -115,7 +128,7 @@ function Appointment(props) {
                                     defaultValue={""}
                                     onChange={handleChange}
                                     onBlur={handleBlur} />
-                                        <p>{errors.message && touched.message ? errors.message : ''}</p> 
+                                <p>{errors.message && touched.message ? errors.message : ''}</p>
                                 <div className="validate" />
                             </div>
 
