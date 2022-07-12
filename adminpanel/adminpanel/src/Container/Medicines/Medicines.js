@@ -68,6 +68,7 @@ export default function Medicines(props) {
         // console.log(fData);
         localStorage.setItem("Medicines", JSON.stringify(fData));
         loadData();
+        handleClose();
     }
 
     const handleUpdate = (values)=>{

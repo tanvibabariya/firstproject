@@ -10,46 +10,57 @@ function Login(props) {
   let schemaVal, initVal;
 
   if (usertype === 'login') {
-     schemaVal = {
+    schemaVal = {
       email: yup.string().email("please enter email id."),
       password: yup.string().required("please enter password."),
     };
 
-    initVal={
-      email:'',
-      password:'',
+    initVal = {
+      email: '',
+      password: '',
     }
 
-  }else if (usertype === 'signup'){
-      schemaVal = {
+  } else if (usertype === 'signup') {
+    schemaVal = {
       name: yup.string().required("please enter name."),
       email: yup.string().email().required("please enter email id"),
       password: yup.string().required("please enter password."),
-    
+
     };
-    initVal={
-      name:'',
-      email:'',
-      password:'',
+    initVal = {
+      name: '',
+      email: '',
+      password: '',
     }
-  }else if(reset === true){
+  } else if (reset === true) {
     schemaVal = {
       email: yup.string().email().required("please enter email id"),
     };
 
-    initVal={
-    email:'',
+    initVal = {
+      email: '',
     }
   }
 
   let schema = yup.object().shape(schemaVal);
 
+  const handleLogin=()=>{
+
+     localStorage.setItem('user', '123');
+  }
+
 
   const formikObj = useFormik({
-    initialValues:initVal ,
+    initialValues: initVal,
     validationSchema: schema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      if (usertype === 'login') {
+       handleLogin()
+      }
+      else {
+
+        alert(JSON.stringify(values, null, 2));
+      }
     },
   });
   const { errors, handleSubmit, handleChange, handleBlur, touched } = formikObj;

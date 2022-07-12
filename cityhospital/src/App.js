@@ -11,9 +11,9 @@ import Login from './Container/Login/Login';
 import Medicines from './Container/Medicines/Medicines';
 import Appointment from './Container/Appointment/Appointment';
 import ListAppointment from './Container/ListAppointment/ListAppointment';
+import PublicRoute from './Routing/PublicRoute';
+import PrivateRoute from './Routing/PrivateRoute';
 // import Userefexample from './Component/Userefexample/Userefexample';
-
-
 
 
 function App(props) {
@@ -21,15 +21,15 @@ function App(props) {
     <div>
        <Header />
       <Switch>
-      <Route  exact path={"/"} component={Home}/>
-      <Route exact path={"/department"} component={Department}/>
-      <Route exact path={"/medicines"} component={Medicines}/>
-      <Route exact path={"/doctors"} component={Doctors}/>
-      <Route exact path={"/about"} component={About}/>
-      <Route exact path={"/contact"} component={Contact}/>
-      <Route exact path={"/login"} component={Login}/>
-      <Route exact path={"/appointment"} component={Appointment}/>
-      <Route exact path={"/listappointment"} component={ListAppointment}/>
+      <PublicRoute  exact path={"/"} component={Home}/>
+      <PublicRoute  exact path={"/department"} component={Department}/>
+      <PublicRoute  exact path={"/medicines"} component={Medicines}/>
+      <PublicRoute  exact path={"/doctors"} component={Doctors}/>
+      <PublicRoute  exact path={"/about"} component={About}/>
+      <PublicRoute  exact path={"/contact"} component={Contact}/>
+      <PublicRoute  exact path={"/login"}  restricted={true} component={Login}/>
+      <PrivateRoute exact path={"/appointment"} component={Appointment}/>
+      <PrivateRoute exact path={"/listappointment"} component={ListAppointment}/>
      </Switch>
       <Footer/> 
       {/* <Userefexample/> */}
