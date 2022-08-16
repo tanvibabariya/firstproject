@@ -19,6 +19,7 @@ export default function Product(props) {
     const [dopen, setDopen] = React.useState(false);
     const [did, setDid] = useState(0);
     const [update, setUpdate] = useState(false);
+    const [filterData, setFilterData] = useState([]);
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -69,25 +70,24 @@ export default function Product(props) {
         loadData();
     }
 
-    const handleUpdate = (values)=>{
-        
+    const handleUpdate = (values) => {
+
         const localData = JSON.parse(localStorage.getItem('Product'));
-        let uData=localData.map((l)=>{
-            if(l.id===values.id)
-            {
+        let uData = localData.map((l) => {
+            if (l.id === values.id) {
                 return values;
             }
-            else{
+            else {
                 return l;
             }
         })
-        
+
         localStorage.setItem("Product", JSON.stringify(uData));
         setUpdate(false);
         loadData();
         handleClose();
         formikObj.resetForm();
-        
+
     }
 
 
@@ -99,6 +99,19 @@ export default function Product(props) {
 
     }
 
+    const handleSearch = (val) => {
+        // console.log(val);
+        let localData = JSON.parse(localStorage.getItem("Product"));
+        // console.log(localData);
+        let fData = localData.filter((l) => (
+            l.name.toLowerCase().includes(val.toLowerCase()) ||
+            l.price.toString().includes(val) ||
+            l.quantity.toString().includes(val) ||
+            l.discripation.toLowerCase().includes(val.toLowerCase())
+        ))
+        setFilterData(fData);
+    }
+    let finaleData = filterData.lenght > 0 ? filterData : data
 
     let schema = yup.object().shape({
         name: yup.string().required(" please enter medicine name"),
@@ -117,10 +130,10 @@ export default function Product(props) {
         },
         validationSchema: schema,
         onSubmit: values => {
-            if(update){
+            if (update) {
                 handleUpdate(values);
             }
-            else{
+            else {
 
                 handleInsert(values);
             }
@@ -176,9 +189,20 @@ export default function Product(props) {
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Product
             </Button>
+            <TextField
+                margin="dense"
+                id="search"
+                name="search"
+                label="Product search"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e) => handleSearch(e.target.value)}
+            />
+
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={data}
+                    rows={finaleData}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}

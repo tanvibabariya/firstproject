@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PersonIcon from '@mui/icons-material/Person';
 import { NavLink } from 'react-router-dom';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 const drawerWidth = 240;
 
@@ -101,6 +102,9 @@ export default function Layout ({children}) {
  const listData=[
   {lable:'Medicines', to:'/medicines' , icon:<LocalHospitalIcon/>},
   {lable:'Patients', to:'/patients' , icon:<PersonIcon/>},
+  {lable:'Counter', to:'/counter' , icon:<HourglassBottomIcon/>},
+  {lable:'UseMemo', to:'/useMemo' , icon:<HourglassBottomIcon/>},
+  {lable:'UsecallBackExample', to:'/UsecallBackExample' , icon:<HourglassBottomIcon/>},
   ]
   return (
     <Box sx={{ display: 'flex' }}>

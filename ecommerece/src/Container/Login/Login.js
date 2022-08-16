@@ -42,6 +42,10 @@ function Login(props) {
             email: '',
         }
     }
+    
+      const handleLogin=()=>{
+        localStorage.setItem('user', '123');
+      }
 
     let schema = yup.object().shape(schemaVal);
 
@@ -50,7 +54,13 @@ function Login(props) {
         initialValues: initVal,
         validationSchema: schema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            if(usertype==='login'){
+                handleLogin();
+            }
+            else{
+
+                alert(JSON.stringify(values, null, 2));
+            }
         },
     });
     const { errors, handleSubmit, handleChange, handleBlur, touched } = formik;

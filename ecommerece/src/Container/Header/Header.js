@@ -35,7 +35,7 @@ function Header(props) {
     <div className="row">
       <div className="col-lg-3 col-md-3">
         <div className="header__logo">
-          <a href="./index.html"><img src="img/logo.png" alt /></a>
+          <NavLink exact to={"/"} ><img src="img/logo.png" alt /></NavLink>
         </div>
       </div>
       <div className="col-lg-6 col-md-6">

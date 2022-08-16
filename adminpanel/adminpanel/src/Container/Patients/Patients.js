@@ -11,13 +11,20 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import { addpatients, deletepatients, getpatients, updatepatients } from '../../redux/action/patients.action';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Patients(props) {
     const [open, setOpen] = React.useState(false);
-    const [data,setData]=useState([])
+    const [data, setData] = useState([])
     const [dopen, setDopen] = React.useState(false);
-    const [did,setDid]=useState(0);
+    const [did, setDid] = useState(0);
     const [update, setUpdate] = useState(false);
+    const[filterData,setFilterData]=useState([])
+
+    const dispatch = useDispatch();
+    const patients = useSelector(state=>state.patients);
+    console.log(patients.patients);
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -32,7 +39,7 @@ function Patients(props) {
     };
 
 
-    const handleInsert=(values)=>{
+    const handleInsert = (values) => {
         let id = Math.floor(Math.random() * 1000);
 
         let data = {
@@ -40,35 +47,37 @@ function Patients(props) {
             ...values
         }
 
-        const localData=JSON.parse(localStorage.getItem('patients'));
-        // console.log(localData);
-        if(localData===null)
-        {
-            localStorage.setItem('patients',JSON.stringify([data]));
-        }
-        else{
-            localData.push(data);
-            localStorage.setItem('patients',JSON.stringify(localData));
-        }
+        // const localData = JSON.parse(localStorage.getItem('patients'));
+        // // console.log(localData);
+        // if (localData === null) {
+        //     localStorage.setItem('patients', JSON.stringify([data]));
+        // }
+        // else {
+        //     localData.push(data);
+        //     localStorage.setItem('patients', JSON.stringify(localData));
+        // }
+
+        dispatch(addpatients(data));
         loadData();
         handleClose();
         formikObj.resetForm();
     }
 
 
-    const  handleDelete=(params)=>{
-        
-        const localData=JSON.parse(localStorage.getItem('patients'));
-        // console.log(params.id);
-        let fData = localData.filter((l) => l.id !== did)
+    const handleDelete = (params) => {
 
-        // console.log(fData);
-        localStorage.setItem("patients", JSON.stringify(fData));
+        // const localData = JSON.parse(localStorage.getItem('patients'));
+        // // console.log(params.id);
+        // let fData = localData.filter((l) => l.id !== did)
+
+        // // console.log(fData);
+        // localStorage.setItem("patients", JSON.stringify(fData));
+        dispatch(deletepatients(did));
         loadData();
 
     }
 
-    const handleEdit=(params)=>{
+    const handleEdit = (params) => {
         handleClickOpen();
         console.log(params);
         setUpdate(true);
@@ -76,26 +85,41 @@ function Patients(props) {
 
     }
 
-    const handleUpdate = (values)=>{
-        
-        const localData = JSON.parse(localStorage.getItem('patients'));
-        let uData=localData.map((l)=>{
-            if(l.id===values.id)
-            {
-                return values;
-            }
-            else{
-                return l;
-            }
-        })
-        
-        localStorage.setItem("patients", JSON.stringify(uData));
+    const handleUpdate = (values) => {
+
+        // const localData = JSON.parse(localStorage.getItem('patients'));
+        // let uData = localData.map((l) => {
+        //     if (l.id === values.id) {
+        //         return values;
+        //     }
+        //     else {
+        //         return l;
+        //     }
+        // })
+
+        // localStorage.setItem("patients", JSON.stringify(uData));
+        dispatch(updatepatients(values));
         setUpdate(false);
         loadData();
         handleClose();
         formikObj.resetForm();
-        
+
     }
+
+    const handleSearch=(val)=>{
+        // console.log(val);
+        let localData=JSON.parse(localStorage.getItem('patients'))
+        // console.log(localData);
+        let fData=localData.filter((l)=>(
+            l.name.toLowerCase().includes(val.toLowerCase()) ||
+            l.age.toString().includes(val) ||
+            l.phone.toString().includes(val) ||
+            l.address.toLowerCase().includes(val.toLowerCase())     
+        ))
+        // console.log(fData);
+        setFilterData(fData);
+    }
+    let finaleData= filterData.length>0 ?filterData:data
 
     let schema = yup.object().shape({
         name: yup.string().required("please enter name"),
@@ -113,10 +137,10 @@ function Patients(props) {
         },
         validationSchema: schema,
         onSubmit: values => {
-            if(update){
+            if (update) {
                 handleUpdate(values);
             }
-            else{
+            else {
 
                 handleInsert(values);
             }
@@ -134,10 +158,11 @@ function Patients(props) {
 
 
     useEffect(() => {
-        loadData();
+        // loadData();
+        dispatch(getpatients());
     }, [])
 
-    let { handleBlur, handleChange, handleSubmit, errors, touched,values } = formikObj
+    let { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikObj
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 70 },
@@ -154,27 +179,39 @@ function Patients(props) {
                         <DeleteIcon />
                     </IconButton>
 
-                     <IconButton aria-label="delete" size="large" onClick={() => handleEdit(params)}>
+                    <IconButton aria-label="delete" size="large" onClick={() => handleEdit(params)}>
                         <EditIcon />
-                    </IconButton> 
+                    </IconButton>
                 </>
-
             )
-
         }
-       
     ];
 
-   
+
 
     return (
+        patients.isLoading ?
+        <p>Loading...</p> :
+        patients.error != '' ?
+            <p>{patients.error}</p>
+            :
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Patients Details
             </Button>
+
+            <TextField
+                margin="dense"
+                id="search"
+                label="Search Patients"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e)=>handleSearch(e.target.value)}
+            />
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={data}
+                    rows={patients.patients}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
@@ -195,7 +232,7 @@ function Patients(props) {
                 <DialogActions>
                     <Button onClick={handleClose}>No</Button>
                     <Button onClick={handleDelete} autoFocus>
-                        
+
                         Yes
                     </Button>
                 </DialogActions>
@@ -208,7 +245,7 @@ function Patients(props) {
                         <DialogContent>
 
                             <TextField
-                             value={values.name}
+                                value={values.name}
                                 margin="dense"
                                 id="name"
                                 label="Name"
@@ -221,7 +258,7 @@ function Patients(props) {
                             {errors.name && touched.name ? <p>{errors.name}</p> : ''}
 
                             <TextField
-                             value={values.age}
+                                value={values.age}
                                 margin="dense"
                                 id="age"
                                 label="Age"
@@ -235,7 +272,7 @@ function Patients(props) {
 
 
                             <TextField
-                             value={values.phone}
+                                value={values.phone}
                                 margin="dense"
                                 id="phone"
                                 label="Phone "
@@ -248,7 +285,7 @@ function Patients(props) {
                             {errors.phone && touched.phone ? <p>{errors.phone}</p> : ''}
 
                             <TextField
-                             value={values.address}
+                                value={values.address}
                                 margin="dense"
                                 id="address"
                                 label="Address"
@@ -266,9 +303,9 @@ function Patients(props) {
                             <Button onClick={handleClose}>Cancel</Button>
                             {
                                 update ?
-                                <Button type='submit'>Update</Button>
-                                :
-                            <Button type='submit'>Save</Button>
+                                    <Button type='submit'>Update</Button>
+                                    :
+                                    <Button type='submit'>Save</Button>
                             }
                         </DialogActions>
                     </Form>

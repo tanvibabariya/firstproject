@@ -11,21 +11,24 @@ import Check_out from './Container/Check_out/Check_out';
 import Blog from './Container/Blog/Blog';
 import Contact from './Container/Contact/Contact';
 import Login from './Container/Login/Login';
+import PublicRoute from './Routing/PublicRoute';
+import PrivateRoute from './Routing/PrivateRoute';
+
 
 function App() {
   return (
     <>
       <Header />
       <Switch>
-        <Route path={"/"} exact component={Home} />
-        <Route path={"/shop"} exact component={Shop} />
-        <Route path={"/about"} exact component={About} />
-        <Route path={"/shop_detail"} exact component={Shop_detail} />
-        <Route path={"/shoping_cart"} exact component={ Shoping_cart} />
-        <Route path={"/check_out"} exact component={Check_out} />
-        <Route path={"/blog"} exact component={Blog} />
-        <Route path={"/contact"} exact component={Contact} />
-        <Route path={"/login"} exact component={Login} />
+        <PublicRoute path={"/"} exact component={Home} />
+        <PublicRoute path={"/shop"} exact component={Shop} />
+        <PublicRoute path={"/about"} exact component={About} />
+        <PublicRoute path={"/shop_detail"} exact component={Shop_detail} />
+        <PrivateRoute path={"/shoping_cart"} exact component={ Shoping_cart} />
+        <PrivateRoute path={"/check_out"} exact component={Check_out} />
+        <PublicRoute path={"/blog"} exact component={Blog} />
+        <PublicRoute path={"/contact"} exact component={Contact} />
+        <PublicRoute path={"/login"} restricted={true} exact component={Login} />
       </Switch>
       <Footer />
     </>

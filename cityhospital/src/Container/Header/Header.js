@@ -1,10 +1,16 @@
 import React from 'react';
+import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import ThemeContext from '../../context/Themecontext';
 
 function Header(props) {
+   
+   const theme = useContext(ThemeContext);
+   console.log(theme);
+
   return (
     <div className="main-header">
-      <div id="topbar" className="d-flex align-items-center fixed-top">
+      <div id="topbar" className={`d-flex align-items-center fixed-top ${theme.theme}`}>
         <div className="container d-flex justify-content-between">
           <div className="contact-info d-flex align-items-center">
             <i className="bi bi-envelope" /> <a href="mailto:contact@example.com">cityhospital@example.com</a>
@@ -16,6 +22,9 @@ function Header(props) {
             <a href="#" className="instagram"><i className="bi bi-instagram" /></a>
             <a href="#" className="linkedin"><i className="bi bi-linkedin" /></a>
           </div>
+
+        <button onClick={()=>theme.toggle_theme(theme.theme)}>Change Theme</button>
+
         </div>
       </div>
       <header id="header" className="fixed-top">
@@ -38,6 +47,10 @@ function Header(props) {
               <li>
 
                 <NavLink exact className="nav-link scrollto" to={"/medicines"} >Medicines</NavLink>
+              </li>
+              <li>
+
+                <NavLink exact className="nav-link scrollto" to={"/counter"} >Counter</NavLink>
               </li>
               <li>
                 <NavLink exact className="nav-link scrollto" to={"/doctors"}>Doctors</NavLink>

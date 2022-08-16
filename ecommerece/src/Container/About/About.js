@@ -54,7 +54,7 @@ function About(props) {
       </div>
     </div>
   </section>
-  <section className="testimonial">
+  <section className="testimonial"> 
     <div className="container-fluid">
       <div className="row d-flex">
         <div className="col-lg-6 p-0">
@@ -75,9 +75,7 @@ function About(props) {
           </div> 
         </div>
         <div className="col-lg-6 p-0">
-          <div className="testimonial__pic set-bg" data-setbg="img/about/testimonial-pic.jpg" />
           <img src='img/about/testimonial-pic.jpg'/>
-
         </div>
       </div>
     </div>

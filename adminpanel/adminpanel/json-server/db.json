@@ -1,0 +1,58 @@
+{
+  "medicines": [
+    {
+      "id": 2,
+      "name": "xyzqwe",
+      "price": 290,
+      "quantity": 20,
+      "expiry": 2023
+    },
+    {
+      "id": 3,
+      "name": "pqr",
+      "price": 400,
+      "quantity": 10,
+      "expiry": 2024
+    },
+    {
+      "id": 20,
+      "name": "cvbv",
+      "price": 2900,
+      "quantity": 22,
+      "expiry": 2025
+    },
+    {
+      "id": 851,
+      "name": "abc",
+      "price": "200",
+      "quantity": "30",
+      "expiry": "2023"
+    },
+    {
+      "id": 706,
+      "name": "axios",
+      "price": "2050",
+      "quantity": "25",
+      "expiry": "2023"
+    }
+  ],
+  "patients": [
+    {
+      "id": 2,
+      "name": "xyz",
+      "age": 20,
+      "phone": 63258741200,
+      "address": "fgnbvdsfvb"
+    },
+    {
+      "id": 136,
+      "name": "abcd",
+      "age": "25",
+      "phone": "6523045897",
+      "address": "jhguyftditkhj"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

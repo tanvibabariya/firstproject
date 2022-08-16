@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import * as ActionTypes from "../redux/ActionTypes"
 
 function Login(props) {
 
   const [usertype, setusertype] = useState('login');
   const [reset, setReset] = useState(false);
+  dispatch = useDispatch();
 
   let schemaVal, initVal;
 
@@ -19,7 +22,6 @@ function Login(props) {
       email: '',
       password: '',
     }
-
   } else if (usertype === 'signup') {
     schemaVal = {
       name: yup.string().required("please enter name."),
@@ -46,7 +48,8 @@ function Login(props) {
 
   const handleLogin=()=>{
 
-     localStorage.setItem('user', '123');
+    //  localStorage.setItem('user', '123');
+    dispatch({type:ActionTypes.SIGNUP,payload:values})
   }
 
 
