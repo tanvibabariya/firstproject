@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import * as ActionTypes from "../redux/ActionTypes"
+import { Signupuser } from '../../redux/action/auth.action';
 
 function Login(props) {
 
   const [usertype, setusertype] = useState('login');
   const [reset, setReset] = useState(false);
-  dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   let schemaVal, initVal;
 
@@ -48,8 +48,8 @@ function Login(props) {
 
   const handleLogin=()=>{
 
-    //  localStorage.setItem('user', '123');
-    dispatch({type:ActionTypes.SIGNUP,payload:values})
+     localStorage.setItem('user', '123');
+ 
   }
 
 
@@ -61,8 +61,9 @@ function Login(props) {
        handleLogin()
       }
       else {
-
-        alert(JSON.stringify(values, null, 2));
+        dispatch(Signupuser(values))
+        // alert(JSON.stringify(values, null, 2));
+        
       }
     },
   });

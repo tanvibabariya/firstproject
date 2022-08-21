@@ -1,1 +1,1 @@
-export const SIGNUP = "SIGNUP";
+export const SIGNUP_USER = "SIGNUP_USER";
