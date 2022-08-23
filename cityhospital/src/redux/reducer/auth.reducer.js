@@ -3,7 +3,7 @@
 const initval = {
     isload: false,
     user: null,
-    error: ''
+    error: ''   
 }
 export const authreducer = (state = initval, action) => {
     switch (action.type) {
