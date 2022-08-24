@@ -6,9 +6,9 @@ import * as ActionTypes from '../ActionTypes'
 function* signUp(action) {
   try {
     const user = yield call(signupAPI, action.payload);
-   
+     console.log(user);
   } catch (e) {
-  
+  console.log(e);
   }
 }
 
