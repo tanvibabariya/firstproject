@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { Signupuser } from '../../redux/action/auth.action';
+import { Signinuser, Signupuser } from '../../redux/action/auth.action';
 
 function Login(props) {
 
@@ -46,10 +46,8 @@ function Login(props) {
 
   let schema = yup.object().shape(schemaVal);
 
-  const handleLogin=()=>{
-
-     localStorage.setItem('user', '123');
- 
+  const handleLogin = (values) => {
+    dispatch(Signinuser(values))
   }
 
 
@@ -58,12 +56,12 @@ function Login(props) {
     validationSchema: schema,
     onSubmit: (values) => {
       if (usertype === 'login') {
-       handleLogin()
+        handleLogin(values)
       }
       else {
         dispatch(Signupuser(values))
         // alert(JSON.stringify(values, null, 2));
-        
+
       }
     },
   });
@@ -144,11 +142,8 @@ function Login(props) {
                       </>
                       :
                       null
-
                 }
-
               </>
-
               {
                 reset ?
                   <> <a type="submit" onClick={() => { setReset(false); setusertype('login') }}>Remember Password?</a><br /></>
