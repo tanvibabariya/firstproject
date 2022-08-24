@@ -41,7 +41,6 @@ export const medicinereducer = (state = inVal, action) => {
                         return m ;
                     }
                 }
-              
                 ),
                 error: ''
             }
