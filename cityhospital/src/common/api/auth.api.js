@@ -1,47 +1,60 @@
-import {  createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 
 
-export const  signupAPI = (data)=>{
-   console.log('signupAPI', data);
+export const signUpAPI = (data) => {
+  console.log('signUpAPI', data);
 
-   
-return new Promise((resolve,reject)=>{
-   
-   createUserWithEmailAndPassword(auth, data.email, data.password)
-     .then((userCredential) => { 
-       const user = userCredential.user;
-       onAuthStateChanged(auth, (user) => {
-        if (user) {
-          sendEmailVerification(user)
-        
-        } else {
-          // User is signed out
-          // ...
+
+  return new Promise((resolve, reject) => {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        onAuthStateChanged(auth, (user) => {
+          if (user.emailVerified) {
+            resolve({ payload: "Successfully register email id" });
+          } else {
+            sendEmailVerification(user)
+              .then(() => {
+                resolve({ payload: "Please verified email" });
+              })
+          }
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode.localeCompare("auth/email-already-in-use" === 0)) {
+          reject({ payload: "already use email" });
+        }
+        else {
+          reject({ payload: errorCode });
         }
       });
-     })
+  })
+}
 
-     .then((user)=>{
-      onAuthStateChanged(auth, (user) => {
-        if (user.emailverified) {
-          resolve({payload:"Successfully register email id"});
+export const signInAPI = (data) => {
+  console.log('signInAPI', data);
+  return new Promise((resolve, reject) => {
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user.emailVerified) {
+          resolve({ payload: "Login successfully" });
         } else {
-         resolve({payload:"Please verified email"});
+          reject({ payload: "First Verified email" });
         }
-      });
-     })
-     .catch((error) => {
-       const errorCode = error.code;
-       const errorMessage = error.message;
-         if(errorCode.localeCompare("auth/email-already-in-use" === 0)){
-         reject({payload:"already use email"});
-         }
-         else{
-          reject({payload:errorCode});
-         }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
        
-    
-     });
-   })
+        console.log(errorCode);
+        if (errorCode.localeCompare("auth/user-not-found") === 0) {
+          reject({ payload: "Do not match email & password" });
+        } else {
+          reject({ payload: errorCode });
+        }
+      });
+  });
 }
