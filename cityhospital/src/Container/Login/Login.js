@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { Signinuser, Signupuser } from '../../redux/action/auth.action';
+import { SignInuserAction, SignUpuserAction } from '../../redux/action/auth.action';
 
 function Login(props) {
 
@@ -47,7 +47,7 @@ function Login(props) {
   let schema = yup.object().shape(schemaVal);
 
   const handleLogin = (values) => {
-    dispatch(Signinuser(values))
+    dispatch(SignInuserAction(values))
   }
 
 
@@ -59,7 +59,7 @@ function Login(props) {
         handleLogin(values)
       }
       else {
-        dispatch(Signupuser(values))
+        dispatch(SignUpuserAction(values))
         // alert(JSON.stringify(values, null, 2));
 
       }

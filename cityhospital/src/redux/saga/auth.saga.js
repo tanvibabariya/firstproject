@@ -1,22 +1,24 @@
-import { call, takeEvery, all } from 'redux-saga/effects'
+import { call, takeEvery, all , put} from 'redux-saga/effects'
 import { signInAPI, signUpAPI } from '../../common/api/auth.api';
+import { setAlert } from '../action/alert.action';
 import * as ActionTypes from '../ActionTypes'
 
 
 function* signUp(action) {
   try {
     const user = yield call(signUpAPI, action.payload);
-     console.log(user);
+    yield put(setAlert({text : user.payload , color:"success"}))
   } catch (e) {
-  console.log(e);
+    yield put(setAlert({text : e.payload , color:"error"}))
   }
 }
 
 function* signIn(action){
   try{
     const user = yield call(signInAPI, action.payload);
+    yield put(setAlert({text : user.payload , color:"success"}))
   }catch(e){
-  console.log(e);
+    yield put(setAlert({text : e.payload , color:"error"}))
   }
 }
 

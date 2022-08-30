@@ -18,12 +18,15 @@ import { ThemeProvider } from './context/Themecontext';
 // import Userefexample from './Component/Userefexample/Userefexample';
 import {store} from "./redux/store"
 import { Provider } from "react-redux";
+import { SnackbarProvider } from 'notistack';
 
 
 function App() {
 
   return (
     <div>
+
+<SnackbarProvider maxSnack={3}>
       <Provider store={store}>
         <ThemeProvider>
           <Header />
@@ -40,9 +43,10 @@ function App() {
             <PrivateRoute exact path={"/listappointment"} component={ListAppointment} />
           </Switch>
           <Footer />
-
         </ThemeProvider>
       </Provider>
+      </SnackbarProvider>
+     
 
       {/* <Userefexample/> */}
     </div>

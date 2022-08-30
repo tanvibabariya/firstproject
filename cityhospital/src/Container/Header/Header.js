@@ -1,6 +1,7 @@
 import React from 'react';
 import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import Alert from '../../Component/Alert/Alert';
 import ThemeContext from '../../context/Themecontext';
 
 function Header(props) {
@@ -26,6 +27,7 @@ function Header(props) {
         <button onClick={()=>theme.toggle_theme(theme.theme)}>Change Theme</button>
 
         </div>
+        <Alert/>
       </div>
       <header id="header" className="fixed-top">
         <div className="container d-flex align-items-center">
