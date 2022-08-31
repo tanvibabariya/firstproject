@@ -1,13 +1,22 @@
 import React from 'react';
 import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import Alert from '../../Component/Alert/Alert';
 import ThemeContext from '../../context/Themecontext';
+import { LogoutAction } from '../../redux/action/auth.action';
 
 function Header(props) {
    
    const theme = useContext(ThemeContext);
-   console.log(theme);
+
+   const user = useSelector(state=> state.auth)
+   const dispatch = useDispatch()
+  //  console.log(theme);
+
+   const handlelogout = () =>{
+    dispatch(LogoutAction())
+   }
 
   return (
     <div className="main-header">
@@ -69,10 +78,14 @@ function Header(props) {
           <NavLink to={"/appointment"} className="appointment-btn scrollto"><span className="d-none d-md-inline">Make an</span>
             Appointment</NavLink>
 
-          {/* <a href="#" className="appointment-btn scrollto">
-            <span className="d-none d-md-inline">Login/ Signup</span>
-          </a> */}
+       
+
+        {
+          user.user === null?
           <NavLink className="appointment-btn scrollto" to={"/login"}>Login/ Signup</NavLink>
+       :
+          <NavLink className="appointment-btn scrollto" to={"/login"} onClick={()=>handlelogout()}>Logout</NavLink>
+        }
         </div>
       </header>
     </div>

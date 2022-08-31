@@ -1,9 +1,9 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
 
 export const signUpAPI = (data) => {
-  // console.log('signUpAPI', data);
+  console.log('signUpAPI', data);
 
 
   return new Promise((resolve, reject) => {
@@ -36,12 +36,13 @@ export const signUpAPI = (data) => {
 
 export const signInAPI = (data) => {
   console.log('signInAPI', data);
+  
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
         if (user.emailVerified) {
-          resolve({ payload: "Login Successfully" })
+          resolve({ payload: user })
         } else {
           reject({ payload: "First Verified email" });
         }
@@ -57,4 +58,17 @@ export const signInAPI = (data) => {
         }
       });
   });
+}
+
+export const LogoutAPI = () => {
+  return new Promise((resolve, reject) => {
+    signOut(auth)
+      .then(() => {
+        resolve({ payload: "Logout successfully" })
+      })
+      .catch((error) => {
+        reject({ payload: error.errorCode });
+      })
+
+  })
 }

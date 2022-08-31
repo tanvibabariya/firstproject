@@ -126,7 +126,7 @@ function Login(props) {
 
                         <div className="row">
                           <div className="col-md-4 form-group mt-3 mt-md-0">
-                            <input type="tel"
+                            <input type="password"
                               className="form-control"
                               name="password"
                               id="password"
