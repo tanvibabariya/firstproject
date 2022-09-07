@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { SignInuserAction, SignUpuserAction } from '../../redux/action/auth.action';
+import { ForgotPasswordAction, GoogleSignInuserAction, SignInuserAction, SignUpuserAction } from '../../redux/action/auth.action';
 
 function Login(props) {
 
@@ -12,7 +12,7 @@ function Login(props) {
 
   let schemaVal, initVal;
 
-  if (usertype === 'login') {
+  if (usertype === 'login' && !reset) {
     schemaVal = {
       email: yup.string().email("please enter email id."),
       password: yup.string().required("please enter password."),
@@ -22,7 +22,7 @@ function Login(props) {
       email: '',
       password: '',
     }
-  } else if (usertype === 'signup') {
+  } else if (usertype === 'signup' && !reset) {
     schemaVal = {
       name: yup.string().required("please enter name."),
       email: yup.string().email().required("please enter email id"),
@@ -55,17 +55,25 @@ function Login(props) {
     initialValues: initVal,
     validationSchema: schema,
     onSubmit: (values) => {
-      if (usertype === 'login') {
+      if (usertype === 'login' && !reset) {
         handleLogin(values)
       }
-      else {
+      else if (usertype === 'signup' && !reset) {
         dispatch(SignUpuserAction(values))
-        // alert(JSON.stringify(values, null, 2));
-
+      }
+      else if (reset === true) {
+        dispatch(ForgotPasswordAction(values))
       }
     },
   });
   const { errors, handleSubmit, handleChange, handleBlur, touched } = formikObj;
+
+  
+  console.log(errors);
+
+  const handlegoogleSignin = () => {
+    dispatch(GoogleSignInuserAction())
+  }
 
   return (
 
@@ -151,7 +159,7 @@ function Login(props) {
                   usertype === 'login' ?
                     <>
                       <a type="submit" onClick={() => setusertype('signup')}>Create have an Account?</a><br />
-                      <a type="submit" onClick={() => setReset('reset')}>Forgot Password?</a></>
+                      <a type="submit" onClick={() => setReset(true)}>Forgot Password?</a></>
                     :
                     <>
                       <a type="submit" onClick={() => setusertype('login')}>Already you have an Account</a>
@@ -164,9 +172,13 @@ function Login(props) {
                   :
                   usertype === 'login' ?
                     <>
-                      <div className="text-center">  <button type="submit">Login</button></div></>
+                      <div className="text-center"> <button type="submit">Login</button></div><br />
+                      <div className="text-center"> <button type="submit" onClick={() => handlegoogleSignin()}>Google Signin</button></div>
+                    </>
                     :
+
                     <div className="text-center"> <button type="submit">SignUp</button></div>
+
               }
             </Form>
           </Formik>

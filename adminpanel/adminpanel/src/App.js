@@ -8,6 +8,7 @@ import {Provider} from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import UsememoExample from './Component/Layout/Examples/UsememoExample.js';
 import UsecallBackExample from './Component/Layout/Examples/UsecallBackExample.js';
+import Doctors from './Container/Doctors/Doctors.js';
 
 function App() { 
   let {store,persistor} = configStore();
@@ -19,6 +20,7 @@ function App() {
     <Switch>
       <Route exact path={"/medicines"}  component={Medicines}/>
       <Route  exact path={"/patients"}  component={Patients}/>
+      <Route  exact path={"/doctors"}  component={Doctors}/>
       <Route  exact path={"/counter"}  component={Counter}/>
       <Route  exact path={"/usememo"}  component={UsememoExample}/>
       <Route  exact path={"/UsecallBackExample"}  component={UsecallBackExample}/>

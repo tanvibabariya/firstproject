@@ -1,5 +1,7 @@
 export const SIGNUP_USER = "SIGNUP_USER";
 export const SIGNIN_USER = "SIGNIN_USER";
+export const GOOGLESIGNIN_USER = "GOOGLESIGNIN_USER";
+export const FORGOT_PASSWORD = "FORGOT_PASSWORD"
 export const LOGOUT_USER = "LOGOUT_USER"
 
 

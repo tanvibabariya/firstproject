@@ -7,16 +7,19 @@ import ThemeContext from '../../context/Themecontext';
 import { LogoutAction } from '../../redux/action/auth.action';
 
 function Header(props) {
-   
-   const theme = useContext(ThemeContext);
 
-   const user = useSelector(state=> state.auth)
-   const dispatch = useDispatch()
+  const theme = useContext(ThemeContext);
+
+  const user = useSelector(state => state.auth)
+
+  console.log(user);
+
+  const dispatch = useDispatch()
   //  console.log(theme);
 
-   const handlelogout = () =>{
+  const handlelogout = () => {
     dispatch(LogoutAction())
-   }
+  }
 
   return (
     <div className="main-header">
@@ -33,10 +36,10 @@ function Header(props) {
             <a href="#" className="linkedin"><i className="bi bi-linkedin" /></a>
           </div>
 
-        <button onClick={()=>theme.toggle_theme(theme.theme)}>Change Theme</button>
+          <button onClick={() => theme.toggle_theme(theme.theme)}>Change Theme</button>
 
         </div>
-        <Alert/>
+        <Alert />
       </div>
       <header id="header" className="fixed-top">
         <div className="container d-flex align-items-center">
@@ -78,14 +81,14 @@ function Header(props) {
           <NavLink to={"/appointment"} className="appointment-btn scrollto"><span className="d-none d-md-inline">Make an</span>
             Appointment</NavLink>
 
-       
 
-        {
-          user.user === null?
-          <NavLink className="appointment-btn scrollto" to={"/login"}>Login/ Signup</NavLink>
-       :
-          <NavLink className="appointment-btn scrollto" to={"/login"} onClick={()=>handlelogout()}>Logout</NavLink>
-        }
+
+          {
+            user.user === null ?
+              <NavLink className="appointment-btn scrollto" to={"/login"}>Login/ Signup</NavLink>
+              :
+              <NavLink className="appointment-btn scrollto" to={"/login"} onClick={() => handlelogout()}>Logout</NavLink>
+          }
         </div>
       </header>
     </div>

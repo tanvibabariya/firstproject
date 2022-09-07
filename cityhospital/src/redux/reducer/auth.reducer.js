@@ -18,9 +18,16 @@ export const authreducer = (state = initval, action) => {
             return{
                 ...state,
                 isload: false,
-                user: '',
+                user: null,
                 error: '' 
             }
+            case ActionTypes.FORGOT_PASSWORD:
+                return{
+                    ...state,
+                    isload: false,
+                    user: action.payload,
+                    error: '' 
+                }
         default:
             return state;
     }

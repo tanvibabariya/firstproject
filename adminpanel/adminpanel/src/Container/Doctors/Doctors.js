@@ -12,12 +12,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import { addmedicines, deletemedicines, getmedicines, updatemedicines } from '../../redux/action/medicine.action';
+import { deletemedicines, updatemedicines } from '../../redux/action/medicine.action';
+import { addDoctors, getDoctors } from '../../redux/action/doctors.action';
 
-
-
-
-export default function Medicines(props) {
+function Doctors(props) {
 
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
@@ -27,7 +25,7 @@ export default function Medicines(props) {
     const [filterData, setFilterData] = useState([]);
 
     const dispatch = useDispatch();
-    const medicines = useSelector(state => state.medicines);
+    const doctors = useSelector(state => state.doctors);
     // console.log(medicines.medicines);
 
     const handleDClickOpen = () => {
@@ -45,14 +43,14 @@ export default function Medicines(props) {
 
 
     const handleInsert = (values) => {
-        let id = Math.floor(Math.random() * 1000);
+        // let id = Math.floor(Math.random() * 1000);
 
-        let data = {
-            id: id,
-            ...values
-        }
+        // let data = {
+        //     id: id,
+        //     ...values
+        // }
 
-        dispatch(addmedicines(data))
+        dispatch(addDoctors(values))
 
         // const localData = JSON.parse(localStorage.getItem('Medicines'));
         // // console.log(values)
@@ -67,7 +65,7 @@ export default function Medicines(props) {
         // }
         loadData();
         handleClose();
-        
+
     }
 
     const handleDelete = () => {
@@ -97,7 +95,7 @@ export default function Medicines(props) {
         // })
 
         dispatch(updatemedicines(values))
-        
+
         // localStorage.setItem("Medicines", JSON.stringify(uData));
         setUpdate(false);
         loadData();
@@ -119,28 +117,24 @@ export default function Medicines(props) {
         let localData = JSON.parse(localStorage.getItem("Medicines"));
         let fData = localData.filter((l) => (
             l.name.toLowerCase().includes(val.toLowerCase()) ||
-            l.price.toString().includes(val) ||
-            l.quantity.toString().includes(val) ||
-            l.expiry.toString().includes(val)
+            l.apt.toString().includes(val) ||
+            l.degree.toString().includes(val) 
         ))
         setFilterData(fData);
     }
     const finaleData = filterData.length > 0 ? filterData : data
 
     let schema = yup.object().shape({
-        name: yup.string().required(" please enter medicine name"),
-        price: yup.string().required(" please enter medicine price"),
-        quantity: yup.string().required(" please enter medicine quantity"),
-        expiry: yup.string().required(" please enter medicine expiry"),
-
+        name: yup.string().required(" please enter doctor name"),
+        apt: yup.string().required(),
+        degree: yup.string().required(" please enter doctor degree")
     });
 
     const formikObj = useFormik({
         initialValues: {
             name: '',
-            price: '',
-            quantity: '',
-            expiry: '',
+            apt: '',
+            degree: '', 
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -156,9 +150,8 @@ export default function Medicines(props) {
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 130 },
-        { field: 'price', headerName: 'Price', width: 130 },
-        { field: 'quantity', headerName: 'Quantity', width: 130 },
-        { field: 'expiry', headerName: 'Expiry', width: 130 },
+        { field: 'apt', headerName: 'APT', width: 130 },
+        { field: 'degree', headerName: 'Degree', width: 130 },
         {
             field: 'action',
             headerName: 'Action',
@@ -189,31 +182,31 @@ export default function Medicines(props) {
 
     useEffect(() => {
         // loadData();
-        dispatch(getmedicines());
+        dispatch(getDoctors());
     }, [])
 
 
 
     const { errors, handleChange, handleSubmit, handleBlur, touched, values } = formikObj
     return (
-        medicines.isLoading ?
-            <p>Loading...</p> :
-            medicines.error != '' ?
-                <p>{medicines.error}</p>
-                :
+        // doctors.isLoading ?
+        //     <p>Loading...</p> :
+            // doctors.error != '' ?
+            //     <p>{doctors.error}</p>
+            //     :
                 <div>
                     <Button variant="outlined" onClick={handleClickOpen}>
-                        Add Medicines
+                        Add Doctors
                     </Button>
 
-                    <h1>Medicines</h1>
+                    <h1>Doctors</h1>
 
 
                     <TextField
                         margin="dense"
                         id="search"
                         name="search"
-                        label=" Search Medicines"
+                        label=" Search Doctors"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -221,7 +214,7 @@ export default function Medicines(props) {
                     />
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid
-                            rows={medicines.medicines}
+                            rows={doctors.doctors}
                             columns={columns}
                             pageSize={5}
                             rowsPerPageOptions={[5]}
@@ -259,7 +252,7 @@ export default function Medicines(props) {
                                         margin="dense"
                                         id="name"
                                         name="name"
-                                        label="Medicines Name"
+                                        label="Doctors Name"
                                         type="text"
                                         fullWidth
                                         variant="standard"
@@ -269,47 +262,35 @@ export default function Medicines(props) {
                                     {errors.name && touched.name ? <p>{errors.name}</p> : ''}
 
                                     <TextField
-                                        value={values.price}
+                                        value={values.degree}
                                         margin="dense"
-                                        id="price"
-                                        name="price"
-                                        label="Medicines price"
+                                        id="degree"
+                                        name="degree"
+                                        label="Degree"
                                         type="text"
                                         fullWidth
                                         variant="standard"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.price && touched.price ? <p>{errors.price}</p> : ''}
+                                    {errors.degree && touched.degree ? <p>{errors.degree}</p> : ''}
 
 
                                     <TextField
-                                        value={values.quantity}
+                                        value={values.apt}
                                         margin="dense"
-                                        id="quantity"
-                                        name="quantity"
-                                        label="Medicines quantity"
+                                        id="apt"
+                                        name="apt"
+                                        label="APT"
                                         type="text"
                                         fullWidth
                                         variant="standard"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.quantity && touched.quantity ? <p>{errors.quantity}</p> : ''}
+                                    {errors.apt && touched.apt ? <p>{errors.apt}</p> : ''}
 
-                                    <TextField
-                                        value={values.expiry}
-                                        margin="dense"
-                                        id="expiry"
-                                        name="expiry"
-                                        label="Medicines expiry"
-                                        type="text"
-                                        fullWidth
-                                        variant="standard"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {errors.expiry && touched.expiry ? <p>{errors.expiry}</p> : ''}
+
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleClose}>Cancel</Button>
@@ -326,7 +307,7 @@ export default function Medicines(props) {
 
                 </div>
     );
+
 }
 
-
-
+export default Doctors;

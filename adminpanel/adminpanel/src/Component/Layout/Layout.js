@@ -102,6 +102,7 @@ export default function Layout ({children}) {
  const listData=[
   {lable:'Medicines', to:'/medicines' , icon:<LocalHospitalIcon/>},
   {lable:'Patients', to:'/patients' , icon:<PersonIcon/>},
+  {lable:'Doctors', to:'/doctors' , icon:<PersonIcon/>},
   {lable:'Counter', to:'/counter' , icon:<HourglassBottomIcon/>},
   {lable:'UseMemo', to:'/useMemo' , icon:<HourglassBottomIcon/>},
   {lable:'UsecallBackExample', to:'/UsecallBackExample' , icon:<HourglassBottomIcon/>},
