@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import './login.css'
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { ForgotPassword, GoogleSignInuser, SignInuser, SignUpuser } from '../../redux/action/auth.action';
+import Alert from '../../Component/Alert/Alert';
 
 function Login(props) {
     const [usertype, setUsertype] = useState('login');
     const [reset, setReset] = useState(false);
+    const dispatch = useDispatch();
 
 
     let schemaVal, initVal;
 
-    if (usertype === 'login') {
+
+    if (usertype === 'login' && !reset) {
         schemaVal = {
             email: yup.string().email("please enter email id."),
             password: yup.string().required("please enter password."),
@@ -21,7 +26,7 @@ function Login(props) {
             password: '',
         }
 
-    } else if (usertype === 'signup') {
+    } else if (usertype === 'signup' && !reset) {
         schemaVal = {
             name: yup.string().required("please enter name."),
             email: yup.string().email().required("please enter email id"),
@@ -42,31 +47,36 @@ function Login(props) {
             email: '',
         }
     }
-    
-      const handleLogin=()=>{
-        localStorage.setItem('user', '123');
-      }
-
     let schema = yup.object().shape(schemaVal);
+
+    const handleLogin = (values) => {
+        dispatch(SignInuser(values))
+    }
+    const handlegoogleSignIn = ()=>{
+        dispatch (GoogleSignInuser())
+    }
 
 
     const formik = useFormik({
         initialValues: initVal,
         validationSchema: schema,
         onSubmit: (values) => {
-            if(usertype==='login'){
-                handleLogin();
+            if (usertype === 'login' && !reset) {
+                handleLogin(values);
             }
-            else{
+            else if (usertype === 'signup' && !reset) {
 
-                alert(JSON.stringify(values, null, 2));
+                dispatch(SignUpuser(values))
             }
-        },
+            else if (reset === true) {
+                dispatch(ForgotPassword(values))
+              }
+        }
     });
     const { errors, handleSubmit, handleChange, handleBlur, touched } = formik;
 
     return (
-        <div>
+        <div >
             {
                 reset ?
                     <h1 className='text-center m-5'>Forgot Password</h1>
@@ -81,6 +91,7 @@ function Login(props) {
                 <div className="login__form">
                     <Formik values={formik}>
                         <Form onSubmit={handleSubmit} action="#">
+                            <Alert/>
 
                             {reset ? null
                                 :
@@ -104,17 +115,17 @@ function Login(props) {
                                 onBlur={handleBlur}
                             />
                             <p>{errors.email && touched.email ? errors.email : ''}</p>
-                            
+
                             {reset ? null :
                                 usertype == 'login' || 'signup' ?
-                                   <>
-                                    <input type="text"
-                                        name="password"
-                                        placeholder="password"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    <p>{errors.password && touched.password ? errors.password : ''}</p>
+                                    <>
+                                        <input type="text"
+                                            name="password"
+                                            placeholder="password"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        <p>{errors.password && touched.password ? errors.password : ''}</p>
                                     </>
                                     :
                                     null
@@ -130,7 +141,7 @@ function Login(props) {
                                             <a type='submit' onClick={() => setUsertype('signup')}>Create have an account</a>
                                             <br />
 
-                                            <a type="submit" className='mb-4' onClick={() => setReset('reset')}>Forgot Password?</a>
+                                            <a type="submit" className='mb-4' onClick={() => setReset(true)}>Forgot Password?</a>
                                             <br />
                                         </>
                                         :
@@ -142,13 +153,16 @@ function Login(props) {
 
                             {
                                 reset ?
-                                    <button type="submit" className="site-btn mb-5 text-center">Submit</button>
+                                    <button type="submit" className="site-btn1 mb-5 text-center">Submit</button>
                                     :
                                     usertype == 'login' ?
-                                        <button type="submit" className="site-btn mb-5 text-center">Login</button>
+                                        <>
+                                            <button type="submit" className="site-btn1 mb-3 text-center">Login</button><br/>
+                                            <button type="submit" className="site-btn1 mb-5 text-center" onClick={()=>handlegoogleSignIn()}>Google SignIN</button>
+                                        </>
                                         :
 
-                                        <button type="submit" className="site-btn mb-5 text-center">Sign up</button>
+                                        <button type="submit" className="site-btn1 mb-5  text-center">Sign up</button>
                             }
 
                         </Form>
