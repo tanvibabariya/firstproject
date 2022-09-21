@@ -14,9 +14,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import { NavLink } from 'react-router-dom';
+import CategoryIcon from '@mui/icons-material/Category';
 
 
 const drawerWidth = 240;
@@ -101,7 +101,9 @@ export default function Layout ({children}) {
     };
   
    const listData=[
-    {lable:'product', to:'/product' , icon:<ProductionQuantityLimitsIcon/>},
+
+    {lable:'Category', to:'/category' , icon:<CategoryIcon/>},
+    {lable:'Product', to:'/product' , icon:<ProductionQuantityLimitsIcon/>},
 
     ]
     return (
@@ -129,7 +131,7 @@ export default function Layout ({children}) {
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ProductionQuantityLimitsIcon/> : <PersonIcon/>}
+              {theme.direction === 'rtl' ? <CategoryIcon/> : <ProductionQuantityLimitsIcon/> }
             </IconButton>
           </DrawerHeader>
           <Divider />

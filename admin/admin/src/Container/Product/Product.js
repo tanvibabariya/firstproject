@@ -184,8 +184,6 @@ export default function Product(props) {
     const { errors, handleChange, handleSubmit, handleBlur, touched, values } = formikObj
     return (
         <div>
-
-
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Product
             </Button>

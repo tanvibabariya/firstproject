@@ -89,7 +89,7 @@ function Login(props) {
             }
           </div>
           <Formik values={formikObj}>
-            <Form onSubmit={handleSubmit} className="php-email-form">
+            <Form onSubmit={handleSubmit} className="php-email-form ">
               {
 
                 reset ? null :

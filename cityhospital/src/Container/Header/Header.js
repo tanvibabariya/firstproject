@@ -39,7 +39,7 @@ function Header(props) {
           <button onClick={() => theme.toggle_theme(theme.theme)}>Change Theme</button>
 
         </div>
-        <Alert />
+        <Alert /> 
       </div>
       <header id="header" className="fixed-top">
         <div className="container d-flex align-items-center">

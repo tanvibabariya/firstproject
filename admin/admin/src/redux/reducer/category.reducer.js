@@ -1,54 +1,53 @@
-import * as Actiontype from '../actiontype'
+import * as Actiontypes from '../ActionTypes'
 
 const inVal = {
     isLoading: false,
-    doctors: [],
+    category: [],
     error: ''
 
 }
 
-export const doctorreducer = (state = inVal, action) => {
+export const categoryreducer = (state = inVal, action) => {
     switch (action.type) {
-        case Actiontype.GET_DOCTORS:
+        case Actiontypes.GET_CATEGORY:
             return {
                 ...state,
                 isLoading: false,
-                doctors: action.payload,
+                category: action.payload,
                 error: ''
             }
-        case Actiontype.ADD_DOCTORS:
+        case Actiontypes.ADD_CATEGORY:
             return {
                 ...state,
                 isLoading: false,
-                doctors: (state.doctors.concat(action.payload)),
+                category: (state.category.concat(action.payload)),
                 error: ''
             }
-        case Actiontype.DELETE_DOCTORS:
+        case Actiontypes.DELETE_CATEGORY:
             return {
                 ...state,
                 isLoading: false,
-                doctors: state.doctors.filter((d) => d.id !== action.payload),
+                category: state.category.filter((c) => c.id !== action.payload),
                 error: ''
             }
-        case Actiontype.UPDATE_DOCTORS:
+        case Actiontypes.UPDATE_CATEGORY:
             return {
                 ...state,
                 isLoading: false,
-                doctors: state.doctors.map((d) => {
-                    if (d.id === action.payload.id) {
+                category: state.category.map((c) => {
+                    if (c.id === action.payload.id) {
                         return action.payload;
                     } else {
-                        return d;
+                        return c;
                     }
-                }
-                ),
+                }),
                 error: ''
             }
-        case Actiontype.ERROR_DOCTORS:
+        case Actiontypes.ERROR_CATEGORY:
             return {
                 ...state,
                 isLoading: false,
-                doctors: [],
+                category: [],
                 error: action.payload
             }
 

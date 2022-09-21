@@ -6,7 +6,7 @@ import { patientsreducer } from "./patients.reducer";
 
 export let rootreducer = combineReducers({
     counter : counterReducer,
-    medicines : medicinereducer,
-    patients : patientsreducer,
+    // medicines : medicinereducer,
+    // patients : patientsreducer,
     doctors : doctorreducer
 })

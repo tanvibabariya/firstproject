@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,10 +13,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDoctors, deleteDoctors, getDoctors, updateDoctors } from '../../redux/action/doctors.action';
+import { addCategory, deleteCategory, getCategory, updateCategory } from '../../redux/action/category.action';
 
-function Doctors(props) {
-
+function Category(props) {
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
     const [dopen, setDopen] = React.useState(false);
@@ -24,8 +24,7 @@ function Doctors(props) {
     const [filterData, setFilterData] = useState([]);
 
     const dispatch = useDispatch();
-    const doctors = useSelector(state => state.doctors);
-
+    const category = useSelector(state => state.category);
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -49,41 +48,39 @@ function Doctors(props) {
         //     ...values
         // }
 
-        dispatch(addDoctors(values))
-
-        // const localData = JSON.parse(localStorage.getItem('Category'));
+        // const localData = JSON.parse(localStorage.getItem('category'));
         // // console.log(values)
 
         // if (localData === null) {
 
-        //     localStorage.setItem("Category", JSON.stringify([data]));
+        //     localStorage.setItem("category", JSON.stringify([data]));
         // }
         // else {
         //     localData.push(data);
-        //     localStorage.setItem("Category", JSON.stringify(localData));
+        //     localStorage.setItem("category", JSON.stringify(localData));
         // }
+       dispatch(addCategory(values))
+
         loadData();
         handleClose();
-
+        formikObj.resetForm();
     }
 
-    const handleDelete = () => {
-
-        dispatch(deleteDoctors(did))
-        // let localData = JSON.parse(localStorage.getItem('Category'));
+    const handleDelete = (params) => {
+        // let localData = JSON.parse(localStorage.getItem('category'));
         // // console.log(params.id);
 
         // let fData = localData.filter((l) => l.id !== did)
 
         // // console.log(fData);
-        // localStorage.setItem("Category", JSON.stringify(fData));
+        // localStorage.setItem("category", JSON.stringify(fData));
+        dispatch(deleteCategory(did))
         loadData();
-        handleClose();
     }
 
     const handleUpdate = (values) => {
 
-        // const localData = JSON.parse(localStorage.getItem('Category'));
+        // const localData = JSON.parse(localStorage.getItem('category'));
         // let uData = localData.map((l) => {
         //     if (l.id === values.id) {
         //         return values;
@@ -93,10 +90,9 @@ function Doctors(props) {
         //     }
         // })
 
-        dispatch(updateDoctors(values))
-
-        // localStorage.setItem("Category", JSON.stringify(uData));
-        setUpdate(false);
+        // localStorage.setItem("category", JSON.stringify(uData));
+        // setUpdate(false);
+        dispatch(updateCategory(values))
         loadData();
         handleClose();
         formikObj.resetForm();
@@ -111,35 +107,30 @@ function Doctors(props) {
         formikObj.setValues(params.row);
 
     }
+
     const handleSearch = (val) => {
         // console.log(val);
-        let localData = JSON.parse(localStorage.getItem("Category"));
+        let localData = JSON.parse(localStorage.getItem("category"));
+        // console.log(localData);
         let fData = localData.filter((l) => (
-            l.name.toLowerCase().includes(val.toLowerCase()) ||
-            l.aptprice.toString().includes(val) ||
-            l.degree.toString().includes(val) ||
-            l.discription.toString().includes(val)
+            l.name.toLowerCase().includes(val.toLowerCase()) 
+            
         ))
         setFilterData(fData);
     }
-    const finaleData = filterData.length > 0 ? filterData : data
+    let finaleData = filterData.lenght > 0 ? filterData : data
 
     let schema = yup.object().shape({
-        name: yup.string().required(" please enter doctor name"),
-        aptprice: yup.number().required(),
-        degree: yup.string().required(" please enter doctor degree"),
-        discription: yup.string().required(),
-        pro_img: yup.mixed().required()  
+        name: yup.string().required(" please enter category name"),
+        // category_img: yup.mixed().required()
+
     });
 
     const formikObj = useFormik({
         initialValues: {
             name: '',
-            aptprice: '',
-            degree: '',
-            discription: '',
-            pro_img:''
-        
+            category_img: ''
+
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -147,6 +138,7 @@ function Doctors(props) {
                 handleUpdate(values);
             }
             else {
+
                 handleInsert(values);
             }
 
@@ -154,18 +146,18 @@ function Doctors(props) {
     });
 
     const columns = [
+
         { field: 'name', headerName: 'Name', width: 130 },
-        { field: 'aptprice', headerName: 'APTPrice', width: 130 },
-        { field: 'degree', headerName: 'Degree', width: 130 },
-        { field: 'discription', headerName: 'Discription', width: 130 },
-        { field: 'pro_img',
-         headerName: 'Profile_Image',
-          width: 130 ,
-          renderCell :(params)=> (
-            <img src={params.row.pro_img} width={50} height={50}/>
-          )
+        {
+            field: 'category_img',
+            headerName: 'Category_Image',
+            width: 130,
+            renderCell: (params) => (
+                <img src={params.row.category_img} width={50} height={50} alt='' />
+            )
         },
         {
+
             field: 'action',
             headerName: 'Action',
             width: 130,
@@ -179,12 +171,14 @@ function Doctors(props) {
                         <EditIcon />
                     </IconButton>
                 </>
+
             )
+
         }
     ];
 
     const loadData = () => {
-        let localData = JSON.parse(localStorage.getItem(''));
+        let localData = JSON.parse(localStorage.getItem('category'));
 
         if (localData !== null) {
 
@@ -195,38 +189,31 @@ function Doctors(props) {
 
     useEffect(() => {
         // loadData();
-        dispatch(getDoctors());
+        dispatch(getCategory());
     }, [])
 
 
-
-    const { errors, handleChange, handleSubmit, handleBlur, touched, values , setFieldValue } = formikObj
+    const { errors, handleChange, handleSubmit, handleBlur, touched,setFieldValue ,values} = formikObj
     return (
-        // doctors.isLoading ?
-        //     <p>Loading...</p> :
-        // doctors.error != '' ?
-        //     <p>{doctors.error}</p>
-        //     :
         <div>
+
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add Doctors
+                Add Category
             </Button>
-
-            <h1>Doctors</h1>
-
             <TextField
                 margin="dense"
                 id="search"
                 name="search"
-                label=" Search Doctors"
+                label="category search"
                 type="text"
                 fullWidth
                 variant="standard"
                 onChange={(e) => handleSearch(e.target.value)}
             />
+
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={doctors.doctors}
+                    rows={category.category}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
@@ -256,7 +243,7 @@ function Doctors(props) {
             <Dialog open={open} onClose={handleClose}>
                 <Formik values={formikObj}>
                     <Form onSubmit={handleSubmit}>
-                        <DialogTitle> Add Doctor</DialogTitle>
+                        <DialogTitle> Add category</DialogTitle>
                         <DialogContent>
 
                             <TextField
@@ -264,7 +251,7 @@ function Doctors(props) {
                                 margin="dense"
                                 id="name"
                                 name="name"
-                                label="Doctors Name"
+                                label="category Name"
                                 type="text"
                                 fullWidth
                                 variant="standard"
@@ -273,57 +260,13 @@ function Doctors(props) {
                             />
                             {errors.name && touched.name ? <p>{errors.name}</p> : ''}
 
-                            <TextField
-                                value={values.degree}
-                                margin="dense"
-                                id="degree"
-                                name="degree"
-                                label="Degree"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
-                            {errors.degree && touched.degree ? <p>{errors.degree}</p> : ''}
-
-
-                            <TextField
-                                value={values.aptprice}
-                                margin="dense"
-                                id="aptprice"
-                                name="aptprice"
-                                label="APTPrice"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
-                            {errors.aptprice && touched.aptprice ? <p>{errors.aptprice}</p> : ''}
-  
-  
-                            <TextField
-                                value={values.discription}
-                                margin="dense"
-                                id="discription"
-                                name="discription"
-                                label="Discription"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
-                            {errors.discription && touched.discription ? <p>{errors.discription}</p> : ''}
-
+                            
                             <input
-                            name ="pro_img"
+                            name ="category_img"
                             type="file"
-                            onChange={(e)=>setFieldValue("pro_img",e.target.files[0])}
-                            // onBlur={handleBlur}
+                            onChange={(e)=>setFieldValue("category_img",e.target.files[0])}
                             />
-                            {errors.pro_img && touched.pro_img ? <p>{errors.pro_img}</p> : ''}
+                            {errors.category_img && touched.category_img ? <p>{errors.category_img}</p> : ''}
 
 
                         </DialogContent>
@@ -340,9 +283,9 @@ function Doctors(props) {
                 </Formik>
             </Dialog>
 
+
         </div>
     );
-
 }
 
-export default Doctors;
+export default Category;
