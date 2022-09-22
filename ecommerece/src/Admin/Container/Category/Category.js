@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import {addCategory, deleteCategory, getCategory, updateCategory , } from '../../redux/action/category.action';
+import { addCategory, deleteCategory, getCategory, updateCategory } from '../../../redux/action/category.action';
 
 function Category(props) {
     const [open, setOpen] = React.useState(false);
@@ -96,6 +96,7 @@ function Category(props) {
         loadData();
         handleClose();
         formikObj.resetForm();
+
     }
 
 
@@ -104,6 +105,7 @@ function Category(props) {
         console.log(params);
         setUpdate(true);
         formikObj.setValues(params.row);
+
     }
 
     const handleSearch = (val) => {
@@ -139,6 +141,7 @@ function Category(props) {
 
                 handleInsert(values);
             }
+
         },
     });
 

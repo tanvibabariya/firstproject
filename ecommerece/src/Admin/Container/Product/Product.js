@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,19 +11,15 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import { useDispatch, useSelector } from 'react-redux';
-import {addCategory, deleteCategory, getCategory, updateCategory , } from '../../redux/action/category.action';
 
-function Category(props) {
+export default function Product(props) {
+
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
     const [dopen, setDopen] = React.useState(false);
     const [did, setDid] = useState(0);
     const [update, setUpdate] = useState(false);
     const [filterData, setFilterData] = useState([]);
-
-    const dispatch = useDispatch();
-    const category = useSelector(state => state.category);
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -41,61 +36,58 @@ function Category(props) {
 
 
     const handleInsert = (values) => {
-        // let id = Math.floor(Math.random() * 1000);
+        let id = Math.floor(Math.random() * 1000);
 
-        // let data = {
-        //     id: id,
-        //     ...values
-        // }
+        let data = {
+            id: id,
+            ...values
+        }
 
-        // const localData = JSON.parse(localStorage.getItem('category'));
-        // // console.log(values)
+        const localData = JSON.parse(localStorage.getItem('Product'));
+        // console.log(values)
 
-        // if (localData === null) {
+        if (localData === null) {
 
-        //     localStorage.setItem("category", JSON.stringify([data]));
-        // }
-        // else {
-        //     localData.push(data);
-        //     localStorage.setItem("category", JSON.stringify(localData));
-        // }
-       dispatch(addCategory(values))
-
+            localStorage.setItem("Product", JSON.stringify([data]));
+        }
+        else {
+            localData.push(data);
+            localStorage.setItem("Product", JSON.stringify(localData));
+        }
         loadData();
         handleClose();
         formikObj.resetForm();
     }
 
     const handleDelete = (params) => {
-        // let localData = JSON.parse(localStorage.getItem('category'));
-        // // console.log(params.id);
+        let localData = JSON.parse(localStorage.getItem('Product'));
+        // console.log(params.id);
 
-        // let fData = localData.filter((l) => l.id !== did)
+        let fData = localData.filter((l) => l.id !== did)
 
-        // // console.log(fData);
-        // localStorage.setItem("category", JSON.stringify(fData));
-        dispatch(deleteCategory(did))
+        // console.log(fData);
+        localStorage.setItem("Product", JSON.stringify(fData));
         loadData();
     }
 
     const handleUpdate = (values) => {
 
-        // const localData = JSON.parse(localStorage.getItem('category'));
-        // let uData = localData.map((l) => {
-        //     if (l.id === values.id) {
-        //         return values;
-        //     }
-        //     else {
-        //         return l;
-        //     }
-        // })
+        const localData = JSON.parse(localStorage.getItem('Product'));
+        let uData = localData.map((l) => {
+            if (l.id === values.id) {
+                return values;
+            }
+            else {
+                return l;
+            }
+        })
 
-        // localStorage.setItem("category", JSON.stringify(uData));
-        // setUpdate(false);
-        dispatch(updateCategory(values))
+        localStorage.setItem("Product", JSON.stringify(uData));
+        setUpdate(false);
         loadData();
         handleClose();
         formikObj.resetForm();
+
     }
 
 
@@ -104,31 +96,37 @@ function Category(props) {
         console.log(params);
         setUpdate(true);
         formikObj.setValues(params.row);
+
     }
 
     const handleSearch = (val) => {
         // console.log(val);
-        let localData = JSON.parse(localStorage.getItem("category"));
+        let localData = JSON.parse(localStorage.getItem("Product"));
         // console.log(localData);
         let fData = localData.filter((l) => (
-            l.name.toLowerCase().includes(val.toLowerCase()) 
-            
+            l.name.toLowerCase().includes(val.toLowerCase()) ||
+            l.price.toString().includes(val) ||
+            l.quantity.toString().includes(val) ||
+            l.discripation.toLowerCase().includes(val.toLowerCase())
         ))
         setFilterData(fData);
     }
     let finaleData = filterData.lenght > 0 ? filterData : data
 
     let schema = yup.object().shape({
-        name: yup.string().required(" please enter category name"),
-        // category_img: yup.mixed().required()
+        name: yup.string().required(" please enter medicine name"),
+        price: yup.string().required(" please enter medicine price"),
+        quantity: yup.string().required(" please enter medicine quantity"),
+        discripation: yup.string().required(" please enter medicine discripation"),
 
     });
 
     const formikObj = useFormik({
         initialValues: {
             name: '',
-            category_img: ''
-
+            price: '',
+            quantity: '',
+            discripation: '',
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -139,28 +137,22 @@ function Category(props) {
 
                 handleInsert(values);
             }
+
         },
     });
 
     const columns = [
-
         { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'price', headerName: 'Price', width: 130 },
+        { field: 'quantity', headerName: 'Quantity', width: 130 },
+        { field: 'discripation', headerName: 'discripation', width: 130 },
         {
-            field: 'category_img',
-            headerName: 'Category_Image',
-            width: 130,
-            renderCell: (params) => (
-                <img src={params.row.category_img} width={50} height={50} alt='' />
-            )
-        },
-        {
-
             field: 'action',
             headerName: 'Action',
             width: 130,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="delete" size="large" onClick={() => { handleDClickOpen(); setDid(params.row) }}>
+                    <IconButton aria-label="delete" size="large" onClick={() => { handleDClickOpen(); setDid(params.id) }}>
                         <DeleteIcon />
                     </IconButton>
 
@@ -175,7 +167,7 @@ function Category(props) {
     ];
 
     const loadData = () => {
-        let localData = JSON.parse(localStorage.getItem('category'));
+        let localData = JSON.parse(localStorage.getItem('Product'));
 
         if (localData !== null) {
 
@@ -185,23 +177,21 @@ function Category(props) {
 
 
     useEffect(() => {
-        // loadData();
-        dispatch(getCategory());
+        loadData();
     }, [])
 
 
-    const { errors, handleChange, handleSubmit, handleBlur, touched,setFieldValue ,values} = formikObj
+    const { errors, handleChange, handleSubmit, handleBlur, touched, values } = formikObj
     return (
         <div>
-
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add Category
+                Add Product
             </Button>
             <TextField
                 margin="dense"
                 id="search"
                 name="search"
-                label="category search"
+                label="Product search"
                 type="text"
                 fullWidth
                 variant="standard"
@@ -210,7 +200,7 @@ function Category(props) {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={category.category}
+                    rows={finaleData}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
@@ -240,7 +230,7 @@ function Category(props) {
             <Dialog open={open} onClose={handleClose}>
                 <Formik values={formikObj}>
                     <Form onSubmit={handleSubmit}>
-                        <DialogTitle> Add category</DialogTitle>
+                        <DialogTitle> Add Product</DialogTitle>
                         <DialogContent>
 
                             <TextField
@@ -248,7 +238,7 @@ function Category(props) {
                                 margin="dense"
                                 id="name"
                                 name="name"
-                                label="category Name"
+                                label="Product Name"
                                 type="text"
                                 fullWidth
                                 variant="standard"
@@ -257,15 +247,48 @@ function Category(props) {
                             />
                             {errors.name && touched.name ? <p>{errors.name}</p> : ''}
 
-                            
-                            <input
-                            name ="category_img"
-                            type="file"
-                            onChange={(e)=>setFieldValue("category_img",e.target.files[0])}
+                            <TextField
+                                value={values.price}
+                                margin="dense"
+                                id="price"
+                                name="price"
+                                label="Product price"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                             />
-                            {errors.category_img && touched.category_img ? <p>{errors.category_img}</p> : ''}
+                            {errors.price && touched.price ? <p>{errors.price}</p> : ''}
 
 
+                            <TextField
+                                value={values.quantity}
+                                margin="dense"
+                                id="quantity"
+                                name="quantity"
+                                label="Product quantity"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {errors.quantity && touched.quantity ? <p>{errors.quantity}</p> : ''}
+
+                            <TextField
+                                value={values.discripation}
+                                margin="dense"
+                                id="discripation"
+                                name="discripation"
+                                label="Product discripation"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {errors.discripation && touched.discripation ? <p>{errors.discripation}</p> : ''}
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Cancel</Button>
@@ -280,9 +303,6 @@ function Category(props) {
                 </Formik>
             </Dialog>
 
-
         </div>
     );
 }
-
-export default Category;

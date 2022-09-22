@@ -2,7 +2,7 @@ import './App.css';
 import Footer from './Container/Footer/Footer';
 import Header from './Container/Header/Header';
 import Home from './Container/Home/Home';
-import { Switch } from 'react-router-dom'
+import { Switch ,Route } from 'react-router-dom'
 import Shop from './Container/Shop/Shop';
 import About from './Container/About/About';
 import Shop_detail from './Container/Shop_detail/Shop_detail';
@@ -15,6 +15,9 @@ import PrivateRoute from './Routing/PrivateRoute';
 import {store} from "./redux/store"
 import { Provider } from "react-redux";
 import { SnackbarProvider } from 'notistack';
+import Layout from './Admin/Component/Layout';
+import Category from './Admin/Container/Category/Category';
+import Product from './Admin/Container/Product/Product'
 
 
 function App() {
@@ -34,6 +37,10 @@ function App() {
         <PrivateRoute path={"/check_out"} exact component={Check_out} />
         <PublicRoute path={"/contact"} exact component={Contact} />
         <PublicRoute path={"/login"} restricted={true} exact component={Login} />
+        <Layout>
+        <Route  path={"/category"} exact component={Category}/>
+        <Route  path={"/product"} exact component={Product}/>
+        </Layout>
       </Switch>
       <Footer />
       </Provider>

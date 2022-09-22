@@ -8,3 +8,11 @@ export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
 export const SET_ALERT = "SET_ALERT";
 export const RESET_ALERT = "RESET_ALERT";
+
+
+export const ERROR_CATEGORY = 'ERROR_CATEGORY';
+
+export const GET_CATEGORY = 'GET_CATEGORY';
+export const ADD_CATEGORY = 'ADD_CATEGORY' ;
+export const DELETE_CATEGORY = 'DELETE_CATEGORY';
+export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
