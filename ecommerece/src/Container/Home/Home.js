@@ -1,6 +1,18 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategory } from '../../redux/action/category.action';
 
 function Home(props) {
+    const dispatch = useDispatch();
+    const category = useSelector((state) => state.category);
+    const data = category.category;
+
+    console.log(data);
+
+    useEffect(() => {
+        dispatch(getCategory());
+    }, [])
     return (
         <div>
             <div>
@@ -30,47 +42,40 @@ function Home(props) {
                 </section>
 
                 {/* Hero Section End */}
-                {/* Banner Section Begin */}
-                <section className="banner spad">
+
+
+                {/* Category Section start */}
+                <section className="product spad">
                     <div className="container">
-                        <div className="row">
-                            <div className="col-lg-7 offset-lg-4">
-                                <div className="banner__item">
-                                    <div className="banner__item__pic">
-                                        <img src="img/banner/banner-1.jpg" alt />
-                                    </div>
-                                    <div className="banner__item__text">
-                                        <h2>Clothing Collections 2030</h2>
-                                        <a href="#">Shop now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-5">
-                                <div className="banner__item banner__item--middle">
-                                    <div className="banner__item__pic">
-                                        <img src="img/banner/banner-2.jpg" alt />
-                                    </div>
-                                    <div className="banner__item__text">
-                                        <h2>Accessories</h2>
-                                        <a href="#">Shop now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-7">
-                                <div className="banner__item banner__item--last">
-                                    <div className="banner__item__pic">
-                                        <img src="img/banner/banner-3.jpg" alt />
-                                    </div>
-                                    <div className="banner__item__text">
-                                        <h2>Shoes Spring 2030</h2>
-                                        <a href="#">Shop now</a>
-                                    </div>
-                                </div>
+                        <div className="row mt-5">
+                            <div className="col-lg-12">
+                                <ul className="filter__controls">
+                                    <li className="active" data-filter="*"> Categories</li>
+                                </ul>
                             </div>
                         </div>
+                        <div className="row product__filter">
+                            {data.map((d) => {
+                                return (
+                                    <div className="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                                        <div className="product__item">
+                                            <div className="product__item__pic set-bg1">
+                                                <img src={d.category_img} alt="" className='img_size' />
+                                            </div>
+                                            <div className="product__text">
+                                                <h6>{d.name}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )})}
+                        </div>
+
+
                     </div>
                 </section>
-                {/* Banner Section End */}
+
+                {/* Category Section end */}
+
                 {/* Product Section Begin */}
                 <section className="product spad">
                     <div className="container">
@@ -78,8 +83,6 @@ function Home(props) {
                             <div className="col-lg-12">
                                 <ul className="filter__controls">
                                     <li className="active" data-filter="*">Best Sellers</li>
-                                    <li data-filter=".new-arrivals">New Arrivals</li>
-                                    <li data-filter=".hot-sales">Hot Sales</li>
                                 </ul>
                             </div>
                         </div>
@@ -90,8 +93,6 @@ function Home(props) {
                                         <img src='img/product/product-1.jpg' />
                                         <span className="label">New</span>
                                         <ul className="product__hover">
-                                            <li><a href="#"><img src="img/icon/heart.png" alt /></a></li>
-                                            <li><a href="#"><img src="img/icon/compare.png" alt /> <span>Compare</span></a></li>
                                             <li><a href="#"><img src="img/icon/search.png" alt /></a></li>
                                         </ul>
                                     </div>
@@ -505,10 +506,45 @@ function Home(props) {
                         </div>
                     </div>
                 </section>
-            </div>
+            </div >
 
-        </div>
+        </div >
     );
 }
 
 export default Home;
+
+
+// <div className="col-lg-7 offset-lg-4">
+// <div className="banner__item">
+//     <div className="banner__item__pic">
+//         <img src="img/banner/banner-1.jpg" alt />
+//     </div>
+//     <div className="banner__item__text">
+//         <h2>Clothing Collections 2030</h2>
+//         <a href="#">Shop now</a>
+//     </div>
+// </div>
+// </div>
+// <div className="col-lg-5">
+// <div className="banner__item banner__item--middle">
+//     <div className="banner__item__pic">
+//         <img src="img/banner/banner-2.jpg" alt />
+//     </div>
+//     <div className="banner__item__text">
+//         <h2>Accessories</h2>
+//         <a href="#">Shop now</a>
+//     </div>
+// </div>
+// </div>
+// <div className="col-lg-7">
+// <div className="banner__item banner__item--last">
+//     <div className="banner__item__pic">
+//         <img src="img/banner/banner-3.jpg" alt />
+//     </div>
+//     <div className="banner__item__text">
+//         <h2>Shoes Spring 2030</h2>
+//         <a href="#">Shop now</a>
+//     </div>
+// </div>
+// </div>

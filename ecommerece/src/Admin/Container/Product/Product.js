@@ -11,6 +11,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct, deleteProduct, getProduct, updateProduct } from '../../../redux/action/product.action';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import { getCategory } from '../../../redux/action/category.action';
 
 export default function Product(props) {
 
@@ -20,6 +27,12 @@ export default function Product(props) {
     const [did, setDid] = useState(0);
     const [update, setUpdate] = useState(false);
     const [filterData, setFilterData] = useState([]);
+  const [selected, setSelected] = useState('');
+
+    const dispatch = useDispatch();
+    const product = useSelector((state) => state.product)
+    const category = useSelector((state) => state.category)
+    const cdata = category.category
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -36,55 +49,23 @@ export default function Product(props) {
 
 
     const handleInsert = (values) => {
-        let id = Math.floor(Math.random() * 1000);
-
-        let data = {
-            id: id,
-            ...values
-        }
-
-        const localData = JSON.parse(localStorage.getItem('Product'));
-        // console.log(values)
-
-        if (localData === null) {
-
-            localStorage.setItem("Product", JSON.stringify([data]));
-        }
-        else {
-            localData.push(data);
-            localStorage.setItem("Product", JSON.stringify(localData));
-        }
+       
+        dispatch(addProduct(values))
         loadData();
         handleClose();
         formikObj.resetForm();
     }
 
     const handleDelete = (params) => {
-        let localData = JSON.parse(localStorage.getItem('Product'));
-        // console.log(params.id);
-
-        let fData = localData.filter((l) => l.id !== did)
-
-        // console.log(fData);
-        localStorage.setItem("Product", JSON.stringify(fData));
-        loadData();
+       
+        dispatch(deleteProduct(did))
+      
     }
 
     const handleUpdate = (values) => {
 
-        const localData = JSON.parse(localStorage.getItem('Product'));
-        let uData = localData.map((l) => {
-            if (l.id === values.id) {
-                return values;
-            }
-            else {
-                return l;
-            }
-        })
-
-        localStorage.setItem("Product", JSON.stringify(uData));
-        setUpdate(false);
-        loadData();
+       
+        dispatch(updateProduct(values))
         handleClose();
         formikObj.resetForm();
 
@@ -114,19 +95,23 @@ export default function Product(props) {
     let finaleData = filterData.lenght > 0 ? filterData : data
 
     let schema = yup.object().shape({
-        name: yup.string().required(" please enter medicine name"),
-        price: yup.string().required(" please enter medicine price"),
-        quantity: yup.string().required(" please enter medicine quantity"),
-        discripation: yup.string().required(" please enter medicine discripation"),
+        categoryname: yup.mixed().required(),
+        name: yup.string().required(" please enter product name"),
+        price: yup.string().required(" please enter  product  price"),
+        quantity: yup.string().required(" please enter product quantity"),
+        discripation: yup.string().required(" please enter product discripation"),
+        product_img: yup.mixed().required()
 
     });
 
     const formikObj = useFormik({
         initialValues: {
+            categoryname :'',
             name: '',
             price: '',
             quantity: '',
             discripation: '',
+            product_img: ''
         },
         validationSchema: schema,
         onSubmit: values => {
@@ -141,18 +126,32 @@ export default function Product(props) {
         },
     });
 
+    const selectionChangeHandler = (event) => {
+        setSelected(event.target.value);
+      };
+    
+
     const columns = [
+        { field: 'categoryname', headerName: 'CategoryName', width: 130 },
         { field: 'name', headerName: 'Name', width: 130 },
         { field: 'price', headerName: 'Price', width: 130 },
         { field: 'quantity', headerName: 'Quantity', width: 130 },
         { field: 'discripation', headerName: 'discripation', width: 130 },
+        {
+            field: 'product_img',
+            headerName: 'Product_Image',
+            width: 130,
+            renderCell: (params) => (
+                <img src={params.row.product_img} width={50} height={50} alt='' />
+            )
+        },
         {
             field: 'action',
             headerName: 'Action',
             width: 130,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="delete" size="large" onClick={() => { handleDClickOpen(); setDid(params.id) }}>
+                    <IconButton aria-label="delete" size="large" onClick={() => { handleDClickOpen(); setDid(params.row) }}>
                         <DeleteIcon />
                     </IconButton>
 
@@ -175,13 +174,14 @@ export default function Product(props) {
         }
     }
 
-
     useEffect(() => {
-        loadData();
+        // loadData();
+        dispatch(getProduct());
+        dispatch(getCategory());
     }, [])
 
 
-    const { errors, handleChange, handleSubmit, handleBlur, touched, values } = formikObj
+    const { errors, handleChange, handleSubmit, handleBlur, touched, values, setFieldValue } = formikObj
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -200,7 +200,7 @@ export default function Product(props) {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={finaleData}
+                    rows={product.product}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
@@ -233,6 +233,25 @@ export default function Product(props) {
                         <DialogTitle> Add Product</DialogTitle>
                         <DialogContent>
 
+                  
+                        <FormControl   required fullWidth>
+                            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={selected}
+                                 onChange={selectionChangeHandler}
+                                label="Category"  
+                            >
+                                {cdata.map((d)=>{
+                                    return(
+
+                                        <MenuItem  key={d.id}  value={d.name}>{d.name}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                            </FormControl>
+
                             <TextField
                                 value={values.name}
                                 margin="dense"
@@ -261,7 +280,6 @@ export default function Product(props) {
                             />
                             {errors.price && touched.price ? <p>{errors.price}</p> : ''}
 
-
                             <TextField
                                 value={values.quantity}
                                 margin="dense"
@@ -289,6 +307,14 @@ export default function Product(props) {
                                 onBlur={handleBlur}
                             />
                             {errors.discripation && touched.discripation ? <p>{errors.discripation}</p> : ''}
+
+                            <input
+                                name="product_img"
+                                type="file"
+                                onChange={(e) => setFieldValue("product_img", e.target.files[0])}
+                            />
+                            {errors.product_img && touched.product_img ? <p>{errors.product_img}</p> : ''}
+
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Cancel</Button>

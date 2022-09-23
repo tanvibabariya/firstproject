@@ -122,7 +122,7 @@ function Category(props) {
 
     let schema = yup.object().shape({
         name: yup.string().required(" please enter category name"),
-        // category_img: yup.mixed().required()
+        category_img: yup.mixed().required()
 
     });
 
