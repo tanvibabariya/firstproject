@@ -125,8 +125,19 @@ ol {
 
 .set-bg {
 	background-repeat: no-repeat;
+	background-size:contain;
+	background-position: top center;
+	
+}
+.set-bg1{
+	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: top center;
+
+}
+.img_size{
+	width: 100%;
+	height: 100%;
 }
 
 .spad {
@@ -1048,6 +1059,22 @@ ol {
 	-webkit-transition: all, 0.3s;
 	-o-transition: all, 0.3s;
 	transition: all, 0.3s;
+}
+.product__text h6{
+	color: #111111;
+	font-size: 20px;
+	font-weight: 600;
+	margin-top: 15px;
+	position: relative;
+}
+.product__text h6::after{
+	position: absolute;
+	content: '';
+	height: 6px;
+	width: 70px;
+	left: -2px;
+	top: 23px;
+	background-color: brown;
 }
 
 .product__item__text .rating {
