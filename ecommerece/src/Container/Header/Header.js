@@ -62,9 +62,9 @@ function Header(props) {
                   <li><a href="#">Pages</a>
                     <ul className="dropdown">
 
-                      <li>
+                      {/* <li>
                         <NavLink exact to={"/shop_detail"}>Shop Details</NavLink>
-                      </li>
+                      </li> */}
 
                       <li>
                         <NavLink exact to={"/shoping_cart"}>Shopping Cart</NavLink>

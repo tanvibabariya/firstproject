@@ -32,9 +32,9 @@ function App() {
         <PublicRoute path={"/"} exact component={Home} />
         <PublicRoute path={"/shop"} exact component={Shop} />
         <PublicRoute path={"/about"} exact component={About} />
-        <PublicRoute path={"/shop_detail"} exact component={Shop_detail} />
-        <PrivateRoute path={"/shoping_cart"} exact component={ Shoping_cart} />
-        <PrivateRoute path={"/check_out"} exact component={Check_out} />
+        <PublicRoute path={"/shop/:productId"} exact component={Shop_detail} />
+        <PublicRoute path={"/shoping_cart/:productId"} exact component={ Shoping_cart} />
+        <PublicRoute path={"/check_out"} exact component={Check_out} />
         <PublicRoute path={"/contact"} exact component={Contact} />
         <PublicRoute path={"/login"} restricted={true} exact component={Login} />
         <Layout>

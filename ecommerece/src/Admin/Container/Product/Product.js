@@ -12,12 +12,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { addProduct, deleteProduct, getProduct, updateProduct } from '../../../redux/action/product.action';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import { getCategory } from '../../../redux/action/category.action';
+import { useHistory } from 'react-router-dom';
 
 export default function Product(props) {
 
@@ -27,12 +29,13 @@ export default function Product(props) {
     const [did, setDid] = useState(0);
     const [update, setUpdate] = useState(false);
     const [filterData, setFilterData] = useState([]);
-  const [selected, setSelected] = useState('');
-
+    
+  
     const dispatch = useDispatch();
     const product = useSelector((state) => state.product)
     const category = useSelector((state) => state.category)
     const cdata = category.category
+   
 
     const handleDClickOpen = () => {
         setDopen(true);
@@ -49,7 +52,7 @@ export default function Product(props) {
 
 
     const handleInsert = (values) => {
-       
+
         dispatch(addProduct(values))
         loadData();
         handleClose();
@@ -57,14 +60,14 @@ export default function Product(props) {
     }
 
     const handleDelete = (params) => {
-       
+
         dispatch(deleteProduct(did))
-      
+
     }
 
     const handleUpdate = (values) => {
 
-       
+
         dispatch(updateProduct(values))
         handleClose();
         formikObj.resetForm();
@@ -95,7 +98,7 @@ export default function Product(props) {
     let finaleData = filterData.lenght > 0 ? filterData : data
 
     let schema = yup.object().shape({
-        categoryname: yup.mixed().required(),
+        categoryname: yup.string().required(),
         name: yup.string().required(" please enter product name"),
         price: yup.string().required(" please enter  product  price"),
         quantity: yup.string().required(" please enter product quantity"),
@@ -106,7 +109,7 @@ export default function Product(props) {
 
     const formikObj = useFormik({
         initialValues: {
-            categoryname :'',
+            categoryname: '',
             name: '',
             price: '',
             quantity: '',
@@ -125,11 +128,6 @@ export default function Product(props) {
 
         },
     });
-
-    const selectionChangeHandler = (event) => {
-        setSelected(event.target.value);
-      };
-    
 
     const columns = [
         { field: 'categoryname', headerName: 'CategoryName', width: 130 },
@@ -233,24 +231,30 @@ export default function Product(props) {
                         <DialogTitle> Add Product</DialogTitle>
                         <DialogContent>
 
-                  
-                        <FormControl   required fullWidth>
-                            <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={selected}
-                                 onChange={selectionChangeHandler}
-                                label="Category"  
-                            >
-                                {cdata.map((d)=>{
-                                    return(
 
-                                        <MenuItem  key={d.id}  value={d.name}>{d.name}</MenuItem>
-                                    )
-                                })}
-                            </Select>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Category"
+                                    name='categoryname'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.categoryname}
+                                >
+                                    <MenuItem value="">Select Category</MenuItem>
+                                    {cdata.map((d) => {
+                                        return (
+
+                                            <MenuItem value={d.name}>{d.name}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
                             </FormControl>
+                            {errors.categoryname && touched.categoryname ? <p>{errors.categoryname}</p> : ''}
+
+
 
                             <TextField
                                 value={values.name}
