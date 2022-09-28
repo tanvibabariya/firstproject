@@ -20,10 +20,10 @@ function ListAppointment(props) {
     const [data, setData] = useState([]);
     const history=useHistory()
 
-    useEffect(() => {
+   
+ useEffect(() => {
         getData();
     }, []);
-
     const getData = () => {
         const localData = JSON.parse(localStorage.getItem('apt'));
         console.log(localData);
