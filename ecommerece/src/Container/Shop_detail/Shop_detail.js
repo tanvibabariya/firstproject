@@ -1,15 +1,22 @@
 import React from 'react';
-import{useSelector} from 'react-redux'
+import{useDispatch, useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import {useParams} from "react-router-dom"
+import { addToCart } from '../../redux/action/cart.action';
 
 function Shop_detail(props) {
+ 
 
+  const dispatch = useDispatch();
   const product = useSelector((state) => state.product);
   const pdata = product.product;
   const {productId} = useParams()
   const thisProduct = pdata.find(prod => prod.id === productId)
-
+  
+  const handleAddCart = ()=>{
+    dispatch(addToCart({ id:thisProduct.id , quantity:1}))
+    
+  }
  
   return (
     <div>
@@ -48,20 +55,13 @@ function Shop_detail(props) {
                   </div>
                 </div>
                
-                <NavLink to={`/shoping_cart/${thisProduct.id}`} className="primary-btn">add to cart</NavLink>
+               
+                <NavLink to={'/shoping_cart'} onClick={()=>handleAddCart(thisProduct.id)} className="primary-btn">add to cart</NavLink>
               </div>
-              {/* <div className="product__details__btns__option">
-                <a href="#"><i className="fa fa-heart" /> add to wishlist</a>
-                <a href="#"><i className="fa fa-exchange" /> Add To Compare</a>
-              </div> */}
-
             </div>
           </div>
-
         </div>
       </div>
-    
-
     </div>
   );
 }

@@ -126,16 +126,14 @@ function Shop(props) {
 
                             <div className="product_bottom product__item__text">
                               <h5>₹{p.price}</h5>
-                              <NavLink to={'/shoping_cart'}><img src="img/icon/cart.png" className='product_cart' width={20} height={20} alt='' /></NavLink>
+                              <Link to={'/shoping_cart'}><img src="img/icon/cart.png" className='product_cart' width={20} height={20} alt='' /></Link>
                               <Link to={`/shop/${p.id}`}> <img className='product_eye' src="img/icon/eye.png" width={30} height={20} alt='' /></Link>
                             </div>
                           </div>
                         </div>
                       </div>
-
                     )
                   })}
-
                 </div>
               </div>
             </div>
